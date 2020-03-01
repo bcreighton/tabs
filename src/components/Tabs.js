@@ -6,32 +6,40 @@ export default class Tabs extends React.Component {
     tabs: []
   };
 
+  state = {
+    currentTabIndex: 0
+  };
+
+  // return a div of the created buttons above
+  renderButtons() {
+    return this.props.tabs.map((tab, i) => (
+      // create a button for each name with a unique key
+      <button key={i} onClick={() => this.handleButtonClick(i)}>
+        {tab.name}
+      </button>
+    ))
+  }
+
+  renderContent() {
+    // set the default tab as the first tab
+    const currentTab = this.props.tabs[this.state.currentTabIndex];
+
+    return (
+      <div className='content'>
+        {currentTab.content}
+      </div>
+    )
+  }
+
+  handleButtonClick = (i) => {
+    this.setState({ currentTabIndex: i })
+  }
+
   render() {
-    // return a div of the created buttons above
-    renderButtons() {
-      return this.props.tabs.map((tab, i) => (
-        // create a button for each name with a unique key
-        <button key={i}>
-          {tab.name}
-        </button>
-      ))
-    }
-
-    renderContent() {
-      // set the default tab as the first tab
-      const currentTab = this.props.tabs[0];
-
-      return (
-        <div className='content'>
-          {currentTab.content}
-        </div>
-      )
-    }
-
     // only show content when the tabs array has a length
     return <div>
       {this.renderButtons()}
-      {this.props.tabs.length && this.renderContent()}
+      {!!this.props.tabs.length && this.renderContent()}
     </div>;
   }
 }
